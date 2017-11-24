@@ -4,6 +4,7 @@
 HFST_FLAGS=
 voikkosharedir=$(libdir)/voikko/3/
 BLACKLIST_FLAGS=-B PROPN-BLOCKING -B FGK
+ORIGIN_FLAGS=-O kotus -O omorfi++
 # {{{ Files
 # Origins
 XML_SRCS=externals/kotus-sanalista_v1.xml externals/joukahainen.xml
@@ -113,13 +114,15 @@ SCIRPTS=$(FORMAT_SCIRPTS) $(GENERATOR_SCIRPTS) $(DATABASE_SCIRPTS) \
 # }}}
 #
 # {{{Generated files
-if WANT_HFST
-GENERIC_AUTOMATA=
+##if WANT_HFST
+GENERIC_AUTOMATA=generated/omorfi.accept.hfst generated/omorfi.tokenise.pmatchfst 
+
+##endif
 if WANT_ACCEPTOR
 GENERIC_AUTOMATA+=generated/omorfi.accept.hfst
 endif
 if WANT_TOKENISER
-GENERIC_AUTOMATA+=generated/omorfi.tokenise.pmatchfst \
+GENERIC_AUTOMATA+=generated/omorfi.tokenise.pmatchfst 
 endif
 if WANT_LEMMATISE
 GENERIC_AUTOMATA+=generated/omorfi.lemmatise.hfst
@@ -195,7 +198,7 @@ LABELSEGMENT_AUTOMATA=generated/omorfi.labelsegment.hfst
 LABELSEGMENT_GENERATED=generated/omorfi-labelsegments.lexc
 endif
 
-endif # HFST
+##endif # HFST
 DB_GENERATED=generated/master.tsv generated/joint.tsv
 if CAN_VISLCG3
 VISLCG3_GENERATED=generated/omorfi.cg3bin
@@ -208,10 +211,10 @@ pkgdata_DATA=$(GENERIC_AUTOMATA) $(FTB3_AUTOMATA) $(OMOR_AUTOMATA) \
 				$(FTB1_AUTOMATA) $(LABELSEGMENT_AUTOMATA) \
 				$(GIELLA_AUTOMATA)
 
-if WANT_VOIKKO
-voikkoshare_DATA=voikko/speller-omorfi.zhfst
+##if WANT_VOIKKO
+voikkoshare_DATA=voikko/speller-omorfi.zhfst 
 pkgdata_DATA+=$(voikkoshare_DATA)
-endif
+##endif
 pkgdata_DATA+=generated/master.tsv
 
 bin_SCRIPTS=bash/omorfi-analyse-text.sh \
@@ -273,13 +276,15 @@ AM_PY_LOG_FLAGS=-m omorfi
 PY_LOG_COMPILER=$(PYTHON)
 
 # These aren't installed but generated
-noinst_DATA=
-if WANT_MONODIX
-noinst_DATA+=generated/omorfi.dix
-endif
-if WANT_KOTUS_WORDLIST
-noinst_DATA+=generated/omorfi-sanalista.xml
-endif
+noinst_DATA=generated/omorfi.dix generated/omorfi-sanalista.xml
+
+##noinst_DATA=
+##if WANT_MONODIX
+##noinst_DATA+=generated/omorfi.dix
+##endif
+##if WANT_KOTUS_WORDLIST
+##noinst_DATA+=generated/omorfi-sanalista.xml
+##endif
 
 # Things that make clean isn't smart enought to wipe
 CLEANFILES=$(GENERIC_GENERATED) $(FTB3_GENERATED) $(DB_GENERATED) \
